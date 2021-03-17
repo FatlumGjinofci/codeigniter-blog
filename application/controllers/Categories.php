@@ -15,6 +15,9 @@
             else
             {
                 $this->category_model->create_category();
+
+                $this->session->set_flashdata('category_created', 'Category Created');
+
                 redirect('categories');
             }
         }
