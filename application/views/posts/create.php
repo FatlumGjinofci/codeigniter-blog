@@ -2,7 +2,7 @@
 
 <?php echo validation_errors(); ?>
 
-<?php echo form_open('posts/create') ?>
+<?php echo form_open_multipart('posts/create') ?>
   <div class="mb-3">
     <label class="form-label">Title</label>
     <input type="text" class="form-control" name="title" placeholder="Add Title">
@@ -22,6 +22,10 @@
 
       <?php endforeach; ?>
     </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Upload Image</label>
+    <input type="file" class="form-control" name="userfile" size="20">
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

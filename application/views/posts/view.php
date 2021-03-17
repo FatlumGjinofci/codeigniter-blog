@@ -3,6 +3,7 @@
     <small class="post-date">
         Posted on: <?php echo $post['created_at'] ?> 
     </small>
+    <img class="img-thumbnail" src="<?php echo site_url(); ?>/assets/images/posts/<?php echo $post['post_image']; ?>" alt="Post Image">
     <p>
         <?php echo $post['body'] ?>
     </p>
