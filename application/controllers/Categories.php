@@ -2,6 +2,11 @@
     class Categories extends CI_Controller {
         public function create()
         {
+            if(!$this->session->userdata('logged_in')) 
+            {
+                redirect('users/login');
+            }
+
             $data['title'] = 'Create category';
 
             $this->form_validation->set_rules('name', 'Name', 'required');

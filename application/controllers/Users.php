@@ -21,7 +21,7 @@
             }
             else
             {
-                $enc_pass = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+                $enc_pass = md5($this->input->post('password'));
                 // die($enc_pass);
 
                 $this->user_model->register($enc_pass);
@@ -32,20 +32,66 @@
             }
         }
 
+        public function login()
+        {
+            $data['title'] = 'Log In';
+
+            $this->form_validation->set_rules('username', 'Username', 'required');
+            $this->form_validation->set_rules('password', 'Password', 'required');
+
+            if($this->form_validation->run() === false)
+            {
+                $this->load->view('templates/header');
+                $this->load->view('users/login', $data);
+                $this->load->view('templates/footer');
+            }
+            else
+            {
+                $username = $this->input->post('username');
+                $password = md5($this->input->post('password'));
+
+                $user_id = $this->user_model->login($username, $password);
+
+                if($user_id)
+                {
+                    //create session
+                    $user_data = array(
+                        'user_id' => $user_id,
+                        'username' => $username,
+                        'logged_in' => true
+                    );
+
+                    $this->session->set_userdata($user_data);
+
+                    // var_dump($this->session->set_userdata($user_data));
+
+                    $this->session->set_flashdata('user_loggedin', 'You are now logged in');
+                    redirect('posts');
+                }
+                else {
+                    $this->session->set_flashdata('login_fail', 'Invalid credentials!');
+                    redirect('users/login');
+                }
+            }
+        }
+
+        public function logout()
+        {
+            $this->session->unset_userdata('logged_in');
+            $this->session->unset_userdata('user_id');
+            $this->session->unset_userdata('username');
+
+            $this->session->set_flashdata('user_loggedout', 'You are now logged out');
+
+            redirect('users/login');
+
+        }
+
         public function check_username_exists($username)
         {
             $this->form_validation
                 ->set_message('check_username_exists', 'That username has been taken!');
             
-            // if($this->user_model->check_username_exists($username))
-            // {
-            //     return true;
-            // }
-            // else
-            // {
-            //     return false;
-            // }
-
             return $this->user_model->check_username_exists($username) ? true : false;
         }
 
