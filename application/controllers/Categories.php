@@ -48,4 +48,19 @@
             $this->load->view('posts/index', $data);
             $this->load->view('templates/footer');  
         }
+
+        public function delete($category_id)
+        {
+            // var_dump($category_id);
+            if(!$this->session->userdata('logged_in'))
+            {
+                redirect('users/login');
+            }
+
+            $this->category_model->delete_category($category_id);
+            $this->session->set_flashdata('category_deleted', 'Category has been deleted');
+
+            redirect('posts');
+
+        }
     }
