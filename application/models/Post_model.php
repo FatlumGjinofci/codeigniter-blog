@@ -5,8 +5,12 @@
             $this->load->database();
         }
 
-        public function get_posts($slug = false)
+        public function get_posts($slug = false, $limit = false, $offset = false)
         {
+            if($limit) 
+            {
+                $this->db->limit($limit, $offset);
+            }
             if($slug === false)
             {
                 $this->db->order_by('posts.id', 'DESC');
